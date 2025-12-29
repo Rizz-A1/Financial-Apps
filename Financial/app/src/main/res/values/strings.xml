@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App Name -->
+    <string name="app_name">Financial</string>
+    
+    <!-- Splash Screen -->
+    <string name="btn_login">Log in</string>
+    
+    <!-- Login Screen -->
+    <string name="welcome_back">Welcome\nBack!</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_password">Password</string>
+    <string name="error_invalid_credentials">Email atau password salah</string>
+    <string name="error_empty_email">Email tidak boleh kosong</string>
+    <string name="error_empty_password">Password tidak boleh kosong</string>
+    <string name="error_invalid_email">Format email tidak valid</string>
+    
+    <!-- Dashboard -->
+    <string name="dashboard_title">Dashbord</string>
+    <string name="greeting">Selamat Datang, %1$s</string>
+    <string name="btn_download_report">Download Laporan</string>
+    
+    <!-- Cards -->
+    <string name="income_today">Pendapatan (Hari ini)</string>
+    <string name="expense_today">Pengeluaran (Hari ini)</string>
+    <string name="weekly_label">Mingguan : %1$s</string>
+    <string name="remaining_balance">Sisa Uang</string>
+    <string name="employees">Karyawan</string>
+    
+    <!-- Chart -->
+    <string name="weekly_income_chart">Pendapatan Minggu ini</string>
+    <string name="comparison_chart">Perbandingan</string>
+    <string name="expense_label">Pengeluaran</string>
+    <string name="income_label">Pendapatan</string>
+    <string name="cycle_label">Siklus</string>
+    
+    <!-- Days -->
+    <string name="day_1_ago">Hari 1 lalu</string>
+    <string name="day_2_ago">Hari 2 lalu</string>
+    <string name="day_3_ago">Hari 3 lalu</string>
+    <string name="day_4_ago">Hari 4 lalu</string>
+    <string name="day_5_ago">Hari 5 lalu</string>
+    <string name="day_6_ago">Hari 6 lalu</string>
+    <string name="day_7_ago">Hari 7 lalu</string>
+    
+    <!-- Navigation Drawer -->
+    <string name="menu_keuangan">KEUANGAN</string>
+    <string name="menu_transaksi">Transaksi</string>
+    <string name="menu_pendapatan">Pendapatan</string>
+    <string name="menu_pengeluaran">Pengeluaran</string>
+    <string name="menu_karyawan">Karyawan</string>
+    <string name="menu_tagihan">Tagihan</string>
+    <string name="menu_kasbon">Kasbon</string>
+    <string name="menu_laporan">Laporan</string>
+    <string name="menu_logout">Log Out</string>
+    
+    <!-- Transaction Forms -->
+    <string name="add_income">Tambah Pendapatan</string>
+    <string name="add_expense">Tambah Pengeluaran</string>
+    <string name="edit_income">Edit Pendapatan</string>
+    <string name="edit_expense">Edit Pengeluaran</string>
+    <string name="hint_amount">Jumlah</string>
+    <string name="hint_description">Deskripsi</string>
+    <string name="hint_date">Tanggal</string>
+    <string name="hint_category">Kategori</string>
+    <string name="btn_save">Simpan</string>
+    <string name="btn_cancel">Batal</string>
+    <string name="btn_delete">Hapus</string>
+    <string name="btn_edit">Edit</string>
+    <string name="btn_add">Tambah</string>
+    
+    <!-- Employee -->
+    <string name="add_employee">Tambah Karyawan</string>
+    <string name="edit_employee">Edit Karyawan</string>
+    <string name="hint_employee_name">Nama Karyawan</string>
+    <string name="hint_employee_position">Jabatan</string>
+    <string name="hint_employee_salary">Gaji</string>
+    <string name="hint_employee_phone">No. Telepon</string>
+    
+    <!-- Kasbon -->
+    <string name="add_kasbon">Tambah Kasbon</string>
+    <string name="edit_kasbon">Edit Kasbon</string>
+    <string name="hint_kasbon_amount">Jumlah Kasbon</string>
+    <string name="hint_kasbon_employee">Karyawan</string>
+    <string name="hint_kasbon_status">Status</string>
+    <string name="status_unpaid">Belum Lunas</string>
+    <string name="status_paid">Lunas</string>
+    
+    <!-- Report -->
+    <string name="report_title">Laporan Keuangan</string>
+    <string name="report_period">Periode</string>
+    <string name="report_total_income">Total Pendapatan</string>
+    <string name="report_total_expense">Total Pengeluaran</string>
+    <string name="report_profit">Keuntungan</string>
+    <string name="report_loss">Kerugian</string>
+    
+    <!-- Common -->
+    <string name="currency_format">Rp%1$s</string>
+    <string name="no_data">Tidak ada data</string>
+    <string name="loading">Memuat…</string>
+    <string name="success">Berhasil</string>
+    <string name="error">Terjadi kesalahan</string>
+    <string name="confirm_delete">Yakin ingin menghapus?</string>
+    <string name="yes">Ya</string>
+    <string name="no">Tidak</string>
+    
+    <!-- Validation -->
+    <string name="error_empty_field">Field tidak boleh kosong</string>
+    <string name="error_invalid_amount">Jumlah tidak valid</string>
+</resources>
