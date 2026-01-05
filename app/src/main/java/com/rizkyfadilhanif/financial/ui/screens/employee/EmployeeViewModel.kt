@@ -19,6 +19,8 @@ data class EmployeeFormUiState(
     val position: String = "",
     val salary: String = "",
     val phone: String = "",
+    val address: String = "",
+    val age: String = "",
     val isSaving: Boolean = false,
     val isSuccess: Boolean = false,
     val error: String? = null
@@ -59,7 +61,9 @@ class EmployeeViewModel(
                     name = it.name,
                     position = it.position,
                     salary = it.salary.toString(),
-                    phone = it.phone
+                    phone = it.phone,
+                    address = it.address,
+                    age = it.age.toString()
                 )
             }
         }
@@ -81,6 +85,14 @@ class EmployeeViewModel(
         _formState.update { it.copy(phone = phone, error = null) }
     }
     
+    fun updateAddress(address: String) {
+        _formState.update { it.copy(address = address, error = null) }
+    }
+    
+    fun updateAge(age: String) {
+        _formState.update { it.copy(age = age, error = null) }
+    }
+    
     fun saveEmployee() {
         val state = _formState.value
         
@@ -100,7 +112,9 @@ class EmployeeViewModel(
                     name = state.name,
                     position = state.position,
                     salary = salary,
-                    phone = state.phone
+                    phone = state.phone,
+                    address = state.address,
+                    age = state.age.toIntOrNull() ?: 0
                 )
                 
                 if (state.id == 0L) {

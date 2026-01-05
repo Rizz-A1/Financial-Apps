@@ -11,5 +11,7 @@ data class EmployeeEntity(
     val position: String,
     val salary: Double,
     val phone: String,
+    val address: String = "",
+    val age: Int = 0,
     val createdAt: Long = System.currentTimeMillis()
 )

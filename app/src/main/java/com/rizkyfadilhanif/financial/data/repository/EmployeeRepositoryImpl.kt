@@ -44,6 +44,8 @@ class EmployeeRepositoryImpl(
             position = position,
             salary = salary,
             phone = phone,
+            address = address,
+            age = age,
             createdAt = createdAt
         )
     }
@@ -55,6 +57,8 @@ class EmployeeRepositoryImpl(
             position = position,
             salary = salary,
             phone = phone,
+            address = address,
+            age = age,
             createdAt = createdAt
         )
     }
