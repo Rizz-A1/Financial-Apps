@@ -13,9 +13,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.rizkyfadilhanif.financial.R
+import com.rizkyfadilhanif.financial.ui.components.AppTopBar
+import com.rizkyfadilhanif.financial.ui.components.GradientBackground
 import com.rizkyfadilhanif.financial.ui.theme.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -54,160 +57,189 @@ fun AddKasbonScreen(
     
     val selectedEmployee = formState.employees.find { it.id == formState.employeeId }
     
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text(title) },
-                navigationIcon = {
-                    IconButton(onClick = onNavigateBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null)
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = PrimaryDark,
-                    titleContentColor = Color.White,
-                    navigationIconContentColor = Color.White
-                )
-            )
-        }
-    ) { padding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
-                .verticalScroll(rememberScrollState())
-                .padding(16.dp)
-        ) {
-            // Employee dropdown
-            ExposedDropdownMenuBox(
-                expanded = employeeDropdownExpanded,
-                onExpandedChange = { employeeDropdownExpanded = it }
-            ) {
-                OutlinedTextField(
-                    value = selectedEmployee?.name ?: "",
-                    onValueChange = { },
-                    readOnly = true,
-                    label = { Text(stringResource(R.string.hint_kasbon_employee)) },
-                    leadingIcon = {
-                        Icon(Icons.Default.Person, contentDescription = null)
-                    },
-                    trailingIcon = {
-                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = employeeDropdownExpanded)
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .menuAnchor(),
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = Primary,
-                        focusedLabelColor = Primary
-                    )
+    GradientBackground {
+        Box(modifier = Modifier.fillMaxSize()) {
+            Column(modifier = Modifier.fillMaxSize()) {
+                AppTopBar(
+                    title = title,
+                    userName = "Rizky",
+                    onNavigationClick = onNavigateBack,
+                    navigationIcon = Icons.AutoMirrored.Filled.ArrowBack
                 )
                 
-                ExposedDropdownMenu(
-                    expanded = employeeDropdownExpanded,
-                    onDismissRequest = { employeeDropdownExpanded = false }
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                        .verticalScroll(rememberScrollState())
+                        .padding(16.dp)
                 ) {
-                    formState.employees.forEach { employee ->
-                        DropdownMenuItem(
-                            text = { Text(employee.name) },
-                            onClick = {
-                                viewModel.updateEmployeeId(employee.id)
-                                employeeDropdownExpanded = false
+                    Card(
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(16.dp),
+                        colors = CardDefaults.cardColors(containerColor = Color.White),
+                        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+                    ) {
+                        Column(modifier = Modifier.padding(16.dp)) {
+                            // Employee dropdown
+                            ExposedDropdownMenuBox(
+                                expanded = employeeDropdownExpanded,
+                                onExpandedChange = { employeeDropdownExpanded = it }
+                            ) {
+                                OutlinedTextField(
+                                    value = selectedEmployee?.name ?: "",
+                                    onValueChange = { },
+                                    readOnly = true,
+                                    label = { Text(stringResource(R.string.hint_kasbon_employee)) },
+                                    leadingIcon = {
+                                        Icon(Icons.Default.Person, contentDescription = null, tint = Primary)
+                                    },
+                                    trailingIcon = {
+                                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = employeeDropdownExpanded)
+                                    },
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .menuAnchor(),
+                                    shape = RoundedCornerShape(12.dp),
+                                    colors = OutlinedTextFieldDefaults.colors(
+                                        focusedBorderColor = Primary,
+                                        focusedLabelColor = Primary,
+                                        unfocusedContainerColor = Color.White,
+                                        focusedContainerColor = Color.White,
+                                        focusedTextColor = Color.Black,
+                                        unfocusedTextColor = Color.Black
+                                    )
+                                )
+
+                                
+                                ExposedDropdownMenu(
+                                    expanded = employeeDropdownExpanded,
+                                    onDismissRequest = { employeeDropdownExpanded = false }
+                                ) {
+                                    formState.employees.forEach { employee ->
+                                        DropdownMenuItem(
+                                            text = { Text(employee.name) },
+                                            onClick = {
+                                                viewModel.updateEmployeeId(employee.id)
+                                                employeeDropdownExpanded = false
+                                            }
+                                        )
+                                    }
+                                }
                             }
-                        )
+                            
+                            Spacer(modifier = Modifier.height(16.dp))
+                            
+                            // Amount field
+                            OutlinedTextField(
+                                value = formState.amount,
+                                onValueChange = { viewModel.updateAmount(it) },
+                                label = { Text(stringResource(R.string.hint_kasbon_amount)) },
+                                leadingIcon = {
+                                    Icon(Icons.Default.AttachMoney, contentDescription = null, tint = Primary)
+                                },
+                                modifier = Modifier.fillMaxWidth(),
+                                singleLine = true,
+                                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                                shape = RoundedCornerShape(12.dp),
+                                colors = OutlinedTextFieldDefaults.colors(
+                                    focusedBorderColor = Primary,
+                                    focusedLabelColor = Primary,
+                                    unfocusedContainerColor = Color.White,
+                                    focusedContainerColor = Color.White,
+                                    focusedTextColor = Color.Black,
+                                    unfocusedTextColor = Color.Black
+                                )
+                            )
+                            
+                            Spacer(modifier = Modifier.height(16.dp))
+                            
+                            // Description field
+                            OutlinedTextField(
+                                value = formState.description,
+                                onValueChange = { viewModel.updateDescription(it) },
+                                label = { Text(stringResource(R.string.hint_description)) },
+                                leadingIcon = {
+                                    Icon(Icons.Default.Description, contentDescription = null, tint = Primary)
+                                },
+                                modifier = Modifier.fillMaxWidth(),
+                                singleLine = true,
+                                shape = RoundedCornerShape(12.dp),
+                                colors = OutlinedTextFieldDefaults.colors(
+                                    focusedBorderColor = Primary,
+                                    focusedLabelColor = Primary,
+                                    unfocusedContainerColor = Color.White,
+                                    focusedContainerColor = Color.White,
+                                    focusedTextColor = Color.Black,
+                                    unfocusedTextColor = Color.Black
+                                )
+                            )
+                            
+                            Spacer(modifier = Modifier.height(16.dp))
+                            
+                            // Date field
+                            OutlinedTextField(
+                                value = dateFormat.format(Date(formState.date)),
+                                onValueChange = { },
+                                label = { Text(stringResource(R.string.hint_date)) },
+                                leadingIcon = {
+                                    Icon(Icons.Default.CalendarMonth, contentDescription = null, tint = Primary)
+                                },
+                                trailingIcon = {
+                                    IconButton(onClick = { showDatePicker = true }) {
+                                        Icon(Icons.Default.DateRange, contentDescription = null, tint = Primary)
+                                    }
+                                },
+                                modifier = Modifier.fillMaxWidth(),
+                                readOnly = true,
+                                shape = RoundedCornerShape(12.dp),
+                                colors = OutlinedTextFieldDefaults.colors(
+                                    focusedBorderColor = Primary,
+                                    focusedLabelColor = Primary,
+                                    unfocusedContainerColor = Color.White,
+                                    focusedContainerColor = Color.White,
+                                    focusedTextColor = Color.Black,
+                                    unfocusedTextColor = Color.Black
+                                )
+                            )
+                            
+                            // Error message
+                            formState.error?.let { error ->
+                                Spacer(modifier = Modifier.height(8.dp))
+                                Text(
+                                    text = error,
+                                    color = Error,
+                                    style = MaterialTheme.typography.bodySmall
+                                )
+                            }
+                            
+                            Spacer(modifier = Modifier.height(32.dp))
+                            
+                            // Save button
+                            Button(
+                                onClick = { viewModel.saveKasbon() },
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(50.dp),
+                                enabled = !formState.isSaving,
+                                shape = RoundedCornerShape(12.dp),
+                                colors = ButtonDefaults.buttonColors(containerColor = Primary)
+                            ) {
+                                if (formState.isSaving) {
+                                    CircularProgressIndicator(
+                                        modifier = Modifier.size(24.dp),
+                                        color = Color.White
+                                    )
+                                } else {
+                                    Text(
+                                        text = stringResource(R.string.btn_save),
+                                        fontWeight = FontWeight.Bold,
+                                        style = MaterialTheme.typography.titleMedium
+                                    )
+                                }
+                            }
+                        }
                     }
-                }
-            }
-            
-            Spacer(modifier = Modifier.height(16.dp))
-            
-            // Amount field
-            OutlinedTextField(
-                value = formState.amount,
-                onValueChange = { viewModel.updateAmount(it) },
-                label = { Text(stringResource(R.string.hint_kasbon_amount)) },
-                leadingIcon = {
-                    Icon(Icons.Default.AttachMoney, contentDescription = null)
-                },
-                modifier = Modifier.fillMaxWidth(),
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = Primary,
-                    focusedLabelColor = Primary
-                )
-            )
-            
-            Spacer(modifier = Modifier.height(16.dp))
-            
-            // Description field
-            OutlinedTextField(
-                value = formState.description,
-                onValueChange = { viewModel.updateDescription(it) },
-                label = { Text(stringResource(R.string.hint_description)) },
-                leadingIcon = {
-                    Icon(Icons.Default.Description, contentDescription = null)
-                },
-                modifier = Modifier.fillMaxWidth(),
-                singleLine = true,
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = Primary,
-                    focusedLabelColor = Primary
-                )
-            )
-            
-            Spacer(modifier = Modifier.height(16.dp))
-            
-            // Date field
-            OutlinedTextField(
-                value = dateFormat.format(Date(formState.date)),
-                onValueChange = { },
-                label = { Text(stringResource(R.string.hint_date)) },
-                leadingIcon = {
-                    Icon(Icons.Default.CalendarMonth, contentDescription = null)
-                },
-                trailingIcon = {
-                    IconButton(onClick = { showDatePicker = true }) {
-                        Icon(Icons.Default.DateRange, contentDescription = null)
-                    }
-                },
-                modifier = Modifier.fillMaxWidth(),
-                readOnly = true,
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = Primary,
-                    focusedLabelColor = Primary
-                )
-            )
-            
-            // Error message
-            formState.error?.let { error ->
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = error,
-                    color = Error,
-                    style = MaterialTheme.typography.bodySmall
-                )
-            }
-            
-            Spacer(modifier = Modifier.height(32.dp))
-            
-            // Save button
-            Button(
-                onClick = { viewModel.saveKasbon() },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(56.dp),
-                enabled = !formState.isSaving,
-                shape = RoundedCornerShape(28.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Primary)
-            ) {
-                if (formState.isSaving) {
-                    CircularProgressIndicator(
-                        modifier = Modifier.size(24.dp),
-                        color = Color.White
-                    )
-                } else {
-                    Text(stringResource(R.string.btn_save))
                 }
             }
         }

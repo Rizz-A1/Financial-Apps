@@ -13,12 +13,15 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.rizkyfadilhanif.financial.R
 import com.rizkyfadilhanif.financial.domain.model.Kasbon
+import com.rizkyfadilhanif.financial.ui.components.AppTopBar
+import com.rizkyfadilhanif.financial.ui.components.GradientBackground
 import com.rizkyfadilhanif.financial.ui.components.formatCurrency
 import com.rizkyfadilhanif.financial.ui.theme.*
 import java.text.SimpleDateFormat
@@ -35,75 +38,73 @@ fun KasbonListScreen(
     val uiState by viewModel.listState.collectAsState()
     var showDeleteDialog by remember { mutableStateOf<Long?>(null) }
     
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text(stringResource(R.string.menu_kasbon)) },
-                navigationIcon = {
-                    IconButton(onClick = onNavigateBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null)
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = PrimaryDark,
-                    titleContentColor = Color.White,
-                    navigationIconContentColor = Color.White
+    GradientBackground {
+        Box(modifier = Modifier.fillMaxSize()) {
+            Column(modifier = Modifier.fillMaxSize()) {
+                AppTopBar(
+                    title = stringResource(R.string.menu_kasbon),
+                    userName = "Rizky", 
+                    onNavigationClick = onNavigateBack,
+                    navigationIcon = Icons.AutoMirrored.Filled.ArrowBack
                 )
-            )
-        },
-        floatingActionButton = {
+                
+                if (uiState.isLoading) {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator(color = Color.White)
+                    }
+                } else if (uiState.kasbonList.isEmpty()) {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Icon(
+                                imageVector = Icons.Default.Receipt,
+                                contentDescription = null,
+                                modifier = Modifier.size(64.dp),
+                                tint = Color.White.copy(alpha = 0.7f)
+                            )
+                            Spacer(modifier = Modifier.height(16.dp))
+                            Text(
+                                text = stringResource(R.string.no_data),
+                                style = MaterialTheme.typography.bodyLarge,
+                                color = Color.White.copy(alpha = 0.9f)
+                            )
+                        }
+                    }
+                } else {
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(horizontal = 16.dp),
+                        verticalArrangement = Arrangement.spacedBy(16.dp),
+                        contentPadding = PaddingValues(vertical = 16.dp)
+                    ) {
+                        items(uiState.kasbonList, key = { it.id }) { kasbon ->
+                            KasbonItem(
+                                kasbon = kasbon,
+                                onClick = { onEditClick(kasbon.id) },
+                                onMarkPaid = { viewModel.markAsPaid(kasbon.id) },
+                                onDelete = { showDeleteDialog = kasbon.id }
+                            )
+                        }
+                        item { Spacer(modifier = Modifier.height(80.dp)) }
+                    }
+                }
+            }
+            
+            // FAB
             FloatingActionButton(
                 onClick = onAddClick,
-                containerColor = Primary
+                containerColor = Primary,
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(16.dp)
             ) {
                 Icon(Icons.Default.Add, contentDescription = null, tint = Color.White)
-            }
-        }
-    ) { padding ->
-        if (uiState.isLoading) {
-            Box(
-                modifier = Modifier.fillMaxSize().padding(padding),
-                contentAlignment = Alignment.Center
-            ) {
-                CircularProgressIndicator(color = Primary)
-            }
-        } else if (uiState.kasbonList.isEmpty()) {
-            Box(
-                modifier = Modifier.fillMaxSize().padding(padding),
-                contentAlignment = Alignment.Center
-            ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Icon(
-                        imageVector = Icons.Default.Receipt,
-                        contentDescription = null,
-                        modifier = Modifier.size(64.dp),
-                        tint = TextSecondary
-                    )
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Text(
-                        text = stringResource(R.string.no_data),
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = TextSecondary
-                    )
-                }
-            }
-        } else {
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(padding)
-                    .padding(horizontal = 16.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-                contentPadding = PaddingValues(vertical = 16.dp)
-            ) {
-                items(uiState.kasbonList, key = { it.id }) { kasbon ->
-                    KasbonItem(
-                        kasbon = kasbon,
-                        onClick = { onEditClick(kasbon.id) },
-                        onMarkPaid = { viewModel.markAsPaid(kasbon.id) },
-                        onDelete = { showDeleteDialog = kasbon.id }
-                    )
-                }
             }
         }
     }
@@ -139,15 +140,17 @@ private fun KasbonItem(
     onDelete: () -> Unit
 ) {
     val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-    val backgroundColor = if (kasbon.isPaid) CardIncome else CardExpense
     val borderColor = if (kasbon.isPaid) BorderIncome else BorderExpense
+    // Use white background for all cards on gradient to look clean, differentiate by border/strip
+    val containerColor = Color.White 
     
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .clickable(onClick = onClick),
         shape = RoundedCornerShape(12.dp),
-        colors = CardDefaults.cardColors(containerColor = backgroundColor)
+        colors = CardDefaults.cardColors(containerColor = containerColor), // Unified to White
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Row(
             modifier = Modifier

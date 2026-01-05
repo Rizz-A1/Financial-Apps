@@ -107,4 +107,24 @@
     <!-- Validation -->
     <string name="error_empty_field">Field tidak boleh kosong</string>
     <string name="error_invalid_amount">Jumlah tidak valid</string>
+    
+    <!-- Pendapatan Screen -->
+    <string name="sumber_pendapatan">Sumber pendapatan</string>
+    <string name="transaksi_masuk">Transaksi Masuk</string>
+    <string name="id_pemasukan">ID Pemasukan</string>
+    <string name="sumber">Sumber</string>
+    <string name="aksi">Aksi</string>
+    <string name="catatan">Catatan %1$d</string>
+    <string name="show">Show</string>
+    <string name="search">Search :</string>
+    <string name="add_category">Tambah Kategori</string>
+    <string name="category_name">Nama Kategori</string>
+    <string name="edit_note">Edit Catatan</string>
+    <string name="note_content">Isi Catatan</string>
+    
+    <!-- Pengeluaran Screen -->
+    <string name="sumber_pengeluaran">Sumber pengeluaran</string>
+    <string name="transaksi_keluar">Transaksi Keluar</string>
+    <string name="id_pengeluaran">ID Pengeluaran</string>
 </resources>
+

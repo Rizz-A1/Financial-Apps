@@ -3,8 +3,14 @@ package com.rizkyfadilhanif.financial.ui.screens.transaction
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.rizkyfadilhanif.financial.domain.model.ExpenseCategory
+import com.rizkyfadilhanif.financial.domain.model.IncomeCategory
+import com.rizkyfadilhanif.financial.domain.model.Note
 import com.rizkyfadilhanif.financial.domain.model.Transaction
 import com.rizkyfadilhanif.financial.domain.model.TransactionType
+import com.rizkyfadilhanif.financial.domain.repository.ExpenseCategoryRepository
+import com.rizkyfadilhanif.financial.domain.repository.IncomeCategoryRepository
+import com.rizkyfadilhanif.financial.domain.repository.NoteRepository
 import com.rizkyfadilhanif.financial.domain.repository.TransactionRepository
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -25,9 +31,24 @@ data class TransactionFormUiState(
     val error: String? = null
 )
 
+// Generic category UI state that works for both income and expense
+data class CategoryUiState(
+    val incomeCategories: List<IncomeCategory> = emptyList(),
+    val expenseCategories: List<ExpenseCategory> = emptyList(),
+    val isLoading: Boolean = true
+)
+
+data class NotesUiState(
+    val notes: List<Note> = emptyList(),
+    val isLoading: Boolean = true
+)
+
 class TransactionViewModel(
     private val repository: TransactionRepository,
-    private val transactionType: TransactionType
+    private val transactionType: TransactionType,
+    private val incomeCategoryRepository: IncomeCategoryRepository? = null,
+    private val expenseCategoryRepository: ExpenseCategoryRepository? = null,
+    private val noteRepository: NoteRepository? = null
 ) : ViewModel() {
     
     private val _listState = MutableStateFlow(TransactionListUiState())
@@ -36,8 +57,16 @@ class TransactionViewModel(
     private val _formState = MutableStateFlow(TransactionFormUiState())
     val formState: StateFlow<TransactionFormUiState> = _formState.asStateFlow()
     
+    private val _categoryState = MutableStateFlow(CategoryUiState())
+    val categoryState: StateFlow<CategoryUiState> = _categoryState.asStateFlow()
+    
+    private val _notesState = MutableStateFlow(NotesUiState())
+    val notesState: StateFlow<NotesUiState> = _notesState.asStateFlow()
+    
     init {
         loadTransactions()
+        loadCategories()
+        loadNotes()
     }
     
     private fun loadTransactions() {
@@ -49,6 +78,38 @@ class TransactionViewModel(
                         isLoading = false
                     )
                 }
+        }
+    }
+    
+    private fun loadCategories() {
+        viewModelScope.launch {
+            if (transactionType == TransactionType.INCOME) {
+                incomeCategoryRepository?.getAllCategories()?.collect { categories ->
+                    _categoryState.value = _categoryState.value.copy(
+                        incomeCategories = categories,
+                        isLoading = false
+                    )
+                }
+            } else {
+                expenseCategoryRepository?.getAllCategories()?.collect { categories ->
+                    _categoryState.value = _categoryState.value.copy(
+                        expenseCategories = categories,
+                        isLoading = false
+                    )
+                }
+            }
+        }
+    }
+    
+    private fun loadNotes() {
+        val noteType = if (transactionType == TransactionType.INCOME) "INCOME" else "EXPENSE"
+        viewModelScope.launch {
+            noteRepository?.getNotesByType(noteType)?.collect { notes ->
+                _notesState.value = NotesUiState(
+                    notes = notes,
+                    isLoading = false
+                )
+            }
         }
     }
     
@@ -133,13 +194,79 @@ class TransactionViewModel(
         _formState.value = TransactionFormUiState()
     }
     
+    // Income Category operations
+    fun addIncomeCategory(category: IncomeCategory) {
+        viewModelScope.launch {
+            incomeCategoryRepository?.insertCategory(category)
+        }
+    }
+    
+    fun updateIncomeCategory(category: IncomeCategory) {
+        viewModelScope.launch {
+            incomeCategoryRepository?.updateCategory(category)
+        }
+    }
+    
+    fun deleteIncomeCategory(id: Long) {
+        viewModelScope.launch {
+            incomeCategoryRepository?.deleteCategory(id)
+        }
+    }
+    
+    // Expense Category operations
+    fun addExpenseCategory(category: ExpenseCategory) {
+        viewModelScope.launch {
+            expenseCategoryRepository?.insertCategory(category)
+        }
+    }
+    
+    fun updateExpenseCategory(category: ExpenseCategory) {
+        viewModelScope.launch {
+            expenseCategoryRepository?.updateCategory(category)
+        }
+    }
+    
+    fun deleteExpenseCategory(id: Long) {
+        viewModelScope.launch {
+            expenseCategoryRepository?.deleteCategory(id)
+        }
+    }
+    
+    // Note operations
+    fun addNote(note: Note) {
+        viewModelScope.launch {
+            noteRepository?.insertNote(note)
+        }
+    }
+    
+    fun updateNote(note: Note) {
+        viewModelScope.launch {
+            noteRepository?.updateNote(note)
+        }
+    }
+    
+    fun deleteNote(id: Long) {
+        viewModelScope.launch {
+            noteRepository?.deleteNote(id)
+        }
+    }
+    
     class Factory(
         private val repository: TransactionRepository,
-        private val transactionType: TransactionType
+        private val transactionType: TransactionType,
+        private val incomeCategoryRepository: IncomeCategoryRepository? = null,
+        private val expenseCategoryRepository: ExpenseCategoryRepository? = null,
+        private val noteRepository: NoteRepository? = null
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return TransactionViewModel(repository, transactionType) as T
+            return TransactionViewModel(
+                repository,
+                transactionType,
+                incomeCategoryRepository,
+                expenseCategoryRepository,
+                noteRepository
+            ) as T
         }
     }
 }
