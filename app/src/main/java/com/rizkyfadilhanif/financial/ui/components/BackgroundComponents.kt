@@ -3,30 +3,32 @@ package com.rizkyfadilhanif.financial.ui.components
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.unit.dp
-import com.rizkyfadilhanif.financial.ui.theme.GradientEnd
-import com.rizkyfadilhanif.financial.ui.theme.GradientLight
-import com.rizkyfadilhanif.financial.ui.theme.GradientStart
 
 @Composable
 fun GradientBackground(
     modifier: Modifier = Modifier,
     content: @Composable BoxScope.() -> Unit
 ) {
+    val colorScheme = MaterialTheme.colorScheme
+    // Use MD3 primary colors for gradient - follows Monet/Dynamic Color
+    val gradientStart = colorScheme.primary
+    val gradientEnd = colorScheme.primaryContainer
+    val decorativeColor = colorScheme.inversePrimary
+    
     Box(
         modifier = modifier
             .fillMaxSize()
             .background(
                 brush = Brush.verticalGradient(
-                    colors = listOf(GradientStart, GradientEnd)
+                    colors = listOf(gradientStart, gradientEnd)
                 )
             )
     ) {
@@ -45,7 +47,7 @@ fun GradientBackground(
             }
             drawPath(
                 path = path1,
-                color = GradientLight.copy(alpha = 0.3f),
+                color = decorativeColor.copy(alpha = 0.3f),
                 style = Fill
             )
             
@@ -59,7 +61,7 @@ fun GradientBackground(
             }
             drawPath(
                 path = path2,
-                color = GradientLight.copy(alpha = 0.2f),
+                color = decorativeColor.copy(alpha = 0.2f),
                 style = Fill
             )
             
@@ -73,7 +75,7 @@ fun GradientBackground(
             }
             drawPath(
                 path = path3,
-                color = GradientLight.copy(alpha = 0.25f),
+                color = decorativeColor.copy(alpha = 0.25f),
                 style = Fill
             )
         }
@@ -86,6 +88,7 @@ fun GradientBackground(
 fun WaveShape(
     modifier: Modifier = Modifier
 ) {
+    val surfaceColor = MaterialTheme.colorScheme.surface
     Canvas(modifier = modifier.fillMaxWidth().height(80.dp)) {
         val width = size.width
         val height = size.height
@@ -107,7 +110,7 @@ fun WaveShape(
         
         drawPath(
             path = path,
-            color = Color.White,
+            color = surfaceColor,
             style = Fill
         )
     }

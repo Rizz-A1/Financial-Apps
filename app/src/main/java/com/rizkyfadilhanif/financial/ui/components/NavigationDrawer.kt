@@ -3,7 +3,6 @@ package com.rizkyfadilhanif.financial.ui.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ExitToApp
@@ -14,14 +13,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.rizkyfadilhanif.financial.R
-import com.rizkyfadilhanif.financial.ui.theme.*
 
 @Composable
 fun NavigationDrawerContent(
@@ -35,16 +31,19 @@ fun NavigationDrawerContent(
     onClose: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val colorScheme = MaterialTheme.colorScheme
+    
     Column(
         modifier = modifier
             .fillMaxHeight()
             .width(280.dp)
-            .background(PrimaryDark)
+            .background(colorScheme.primary) // MD3 primary color (follows Monet)
     ) {
         // Header with back arrow and title
         Row(
             modifier = Modifier
                 .fillMaxWidth()
+                .statusBarsPadding() // Prevent collision with status bar
                 .padding(horizontal = 8.dp, vertical = 16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -52,14 +51,14 @@ fun NavigationDrawerContent(
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
                     contentDescription = null,
-                    tint = Color.White
+                    tint = colorScheme.onPrimary
                 )
             }
             
             Text(
                 text = stringResource(R.string.menu_keuangan),
                 style = MaterialTheme.typography.titleLarge,
-                color = Color.White,
+                color = colorScheme.onPrimary,
                 fontWeight = FontWeight.Bold
             )
             
@@ -70,13 +69,13 @@ fun NavigationDrawerContent(
                 modifier = Modifier
                     .size(40.dp)
                     .clip(RoundedCornerShape(8.dp))
-                    .background(Color.White.copy(alpha = 0.2f)),
+                    .background(colorScheme.onPrimary.copy(alpha = 0.2f)),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
                     imageVector = Icons.Default.AccountBalance,
                     contentDescription = null,
-                    tint = Color.Yellow,
+                    tint = colorScheme.inversePrimary,
                     modifier = Modifier.size(24.dp)
                 )
             }
@@ -84,11 +83,11 @@ fun NavigationDrawerContent(
             Spacer(modifier = Modifier.width(8.dp))
         }
         
-        // Dashbord label
+        // Dashboard label
         Text(
             text = stringResource(R.string.dashboard_title),
             style = MaterialTheme.typography.titleMedium,
-            color = Color.White,
+            color = colorScheme.onPrimary,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
         )
@@ -148,12 +147,12 @@ fun NavigationDrawerContent(
 
 @Composable
 private fun DrawerSectionHeader(title: String) {
+    val colorScheme = MaterialTheme.colorScheme
     Text(
         text = title,
         style = MaterialTheme.typography.titleMedium,
-        color = Color.White,
+        color = colorScheme.onPrimary,
         fontWeight = FontWeight.SemiBold,
-        fontSize = 16.sp,
         modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
     )
 }
@@ -164,6 +163,7 @@ private fun DrawerMenuItem(
     title: String,
     onClick: () -> Unit
 ) {
+    val colorScheme = MaterialTheme.colorScheme
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -174,7 +174,7 @@ private fun DrawerMenuItem(
         Icon(
             imageVector = icon,
             contentDescription = null,
-            tint = Color.White.copy(alpha = 0.9f),
+            tint = colorScheme.onPrimary.copy(alpha = 0.9f),
             modifier = Modifier.size(22.dp)
         )
         
@@ -183,8 +183,7 @@ private fun DrawerMenuItem(
         Text(
             text = title,
             style = MaterialTheme.typography.bodyMedium,
-            color = Color.White.copy(alpha = 0.95f),
-            fontSize = 14.sp
+            color = colorScheme.onPrimary.copy(alpha = 0.95f)
         )
     }
 }

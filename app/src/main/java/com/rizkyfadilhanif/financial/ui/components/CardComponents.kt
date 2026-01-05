@@ -9,14 +9,10 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.rizkyfadilhanif.financial.R
-import com.rizkyfadilhanif.financial.ui.theme.*
 import java.text.NumberFormat
 import java.util.Locale
 
@@ -30,6 +26,8 @@ fun DashboardCard(
     borderColor: Color,
     modifier: Modifier = Modifier
 ) {
+    val colorScheme = MaterialTheme.colorScheme
+    
     Card(
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
@@ -64,12 +62,12 @@ fun DashboardCard(
                     text = value,
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold,
-                    color = TextPrimary
+                    color = colorScheme.onSurface // MD3: adapts to dark mode
                 )
                 Text(
                     text = weeklyValue,
                     style = MaterialTheme.typography.bodySmall,
-                    color = TextSecondary
+                    color = colorScheme.onSurfaceVariant // MD3: adapts to dark mode
                 )
             }
             
@@ -94,6 +92,8 @@ fun SimpleCard(
     borderColor: Color,
     modifier: Modifier = Modifier
 ) {
+    val colorScheme = MaterialTheme.colorScheme
+    
     Card(
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
@@ -127,7 +127,7 @@ fun SimpleCard(
                     text = value,
                     style = MaterialTheme.typography.headlineMedium,
                     fontWeight = FontWeight.Bold,
-                    color = TextPrimary
+                    color = colorScheme.onSurface // MD3: adapts to dark mode
                 )
             }
             
