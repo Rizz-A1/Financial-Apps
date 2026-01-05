@@ -11,7 +11,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -21,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import com.rizkyfadilhanif.financial.R
 import com.rizkyfadilhanif.financial.ui.components.GradientBackground
 import com.rizkyfadilhanif.financial.ui.components.WaveShape
-import com.rizkyfadilhanif.financial.ui.theme.*
+import com.rizkyfadilhanif.financial.ui.theme.Success
 
 @Composable
 fun LoginScreen(
@@ -35,6 +34,8 @@ fun LoginScreen(
     var passwordError by remember { mutableStateOf<String?>(null) }
     var loginError by remember { mutableStateOf<String?>(null) }
     
+    val colorScheme = MaterialTheme.colorScheme
+    
     val emailErrorText = stringResource(R.string.error_empty_email)
     val passwordErrorText = stringResource(R.string.error_empty_password)
     val invalidEmailText = stringResource(R.string.error_invalid_email)
@@ -43,7 +44,7 @@ fun LoginScreen(
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
-        // Top section with gradient
+        // Top section with gradient (Monet colors)
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -62,7 +63,7 @@ fun LoginScreen(
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = null,
-                            tint = Color.White
+                            tint = colorScheme.onPrimary
                         )
                     }
                     
@@ -71,7 +72,7 @@ fun LoginScreen(
                     Text(
                         text = stringResource(R.string.welcome_back),
                         style = MaterialTheme.typography.displayMedium,
-                        color = Color.White,
+                        color = colorScheme.onPrimary,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.padding(horizontal = 16.dp)
                     )
@@ -89,7 +90,7 @@ fun LoginScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(0.55f)
-                .background(Color.White)
+                .background(colorScheme.surface)
                 .padding(horizontal = 32.dp)
         ) {
             Spacer(modifier = Modifier.height(16.dp))
@@ -107,7 +108,7 @@ fun LoginScreen(
                     Icon(
                         imageVector = Icons.Default.Email,
                         contentDescription = null,
-                        tint = TextSecondary
+                        tint = colorScheme.onSurfaceVariant
                     )
                 },
                 trailingIcon = {
@@ -125,10 +126,10 @@ fun LoginScreen(
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedTextColor = TextPrimary,
-                    unfocusedTextColor = TextPrimary,
-                    focusedBorderColor = Primary,
-                    unfocusedBorderColor = TextSecondary.copy(alpha = 0.5f)
+                    focusedTextColor = colorScheme.onSurface,
+                    unfocusedTextColor = colorScheme.onSurface,
+                    focusedBorderColor = colorScheme.primary,
+                    unfocusedBorderColor = colorScheme.outline
                 )
             )
             
@@ -147,7 +148,7 @@ fun LoginScreen(
                     Icon(
                         imageVector = Icons.Default.Lock,
                         contentDescription = null,
-                        tint = TextSecondary
+                        tint = colorScheme.onSurfaceVariant
                     )
                 },
                 trailingIcon = {
@@ -155,7 +156,7 @@ fun LoginScreen(
                         Icon(
                             imageVector = if (passwordVisible) Icons.Default.VisibilityOff else Icons.Default.Visibility,
                             contentDescription = null,
-                            tint = TextSecondary
+                            tint = colorScheme.onSurfaceVariant
                         )
                     }
                 },
@@ -166,10 +167,10 @@ fun LoginScreen(
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedTextColor = TextPrimary,
-                    unfocusedTextColor = TextPrimary,
-                    focusedBorderColor = Primary,
-                    unfocusedBorderColor = TextSecondary.copy(alpha = 0.5f)
+                    focusedTextColor = colorScheme.onSurface,
+                    unfocusedTextColor = colorScheme.onSurface,
+                    focusedBorderColor = colorScheme.primary,
+                    unfocusedBorderColor = colorScheme.outline
                 )
             )
             
@@ -177,7 +178,7 @@ fun LoginScreen(
             loginError?.let { error ->
                 Text(
                     text = error,
-                    color = Error,
+                    color = colorScheme.error,
                     style = MaterialTheme.typography.bodySmall,
                     modifier = Modifier.padding(top = 8.dp)
                 )
@@ -218,7 +219,7 @@ fun LoginScreen(
                     .height(56.dp),
                 shape = RoundedCornerShape(28.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = PrimaryDark
+                    containerColor = colorScheme.primary
                 )
             ) {
                 Text(

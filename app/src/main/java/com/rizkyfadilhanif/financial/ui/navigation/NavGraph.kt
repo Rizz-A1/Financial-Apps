@@ -59,8 +59,8 @@ fun NavGraph(
         composable(Screen.Login.route) {
             LoginScreen(
                 onBackClick = { navController.popBackStack() },
-                onLoginSuccess = { email, name ->
-                    sessionManager.saveLoginSession(email, name)
+                onLoginSuccess = {
+                    sessionManager.saveLoginSession("admin@gmail.com", "Admin")
                     navController.navigate(Screen.Dashboard.route) {
                         popUpTo(Screen.Splash.route) { inclusive = true }
                     }
@@ -79,7 +79,6 @@ fun NavGraph(
             
             DashboardScreen(
                 viewModel = dashboardViewModel,
-                userName = sessionManager.getUserName(),
                 onNavigateToIncome = { navController.navigate(Screen.IncomeList.route) },
                 onNavigateToExpense = { navController.navigate(Screen.ExpenseList.route) },
                 onNavigateToEmployee = { navController.navigate(Screen.EmployeeList.route) },
@@ -99,8 +98,10 @@ fun NavGraph(
         composable(Screen.IncomeList.route) {
             val viewModel: TransactionViewModel = viewModel(
                 factory = TransactionViewModel.Factory(
-                    application.transactionRepository,
-                    TransactionType.INCOME
+                    repository = application.transactionRepository,
+                    transactionType = TransactionType.INCOME,
+                    incomeCategoryRepository = application.incomeCategoryRepository,
+                    noteRepository = application.noteRepository
                 )
             )
             
@@ -154,8 +155,10 @@ fun NavGraph(
         composable(Screen.ExpenseList.route) {
             val viewModel: TransactionViewModel = viewModel(
                 factory = TransactionViewModel.Factory(
-                    application.transactionRepository,
-                    TransactionType.EXPENSE
+                    repository = application.transactionRepository,
+                    transactionType = TransactionType.EXPENSE,
+                    expenseCategoryRepository = application.expenseCategoryRepository,
+                    noteRepository = application.noteRepository
                 )
             )
             
